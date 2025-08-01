@@ -8,6 +8,8 @@ from tkinter import *
 import socket
 import psutil
 
+import os
+
 
 hostname = socket.gethostname()
 ip_local = socket.gethostbyname(hostname)
@@ -42,11 +44,15 @@ def coletar_ip_com_gateway():
         print("Erro ao obter IP:", e)
         return None
 
+
+def abrir_site():
+    os.startfile(f'http://{ip_de_rede}:3000')
+
 ip_de_rede = coletar_ip_com_gateway()
 
 
 Label(App, text=f'Conetecte-se em: {ip_de_rede}:9999').pack()
-
+Button(App, text="Abrir site", command=abrir_site).pack()
 
 async def handler(websocket):
 

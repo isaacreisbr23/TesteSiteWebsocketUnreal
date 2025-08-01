@@ -15,67 +15,80 @@ export default function WebSocketComponent() {
   const [valorIp, setValorIp] = useState("");
   const [inputIp, setInputIp] = useState("");
 
-
-
   const socketRef = useRef(null);
 
 
-
+  //Conexao ao socket
   const conectarAoSocket = () => {
 
-    const url =  new WebSocket("ws://"+inputIp);
-    socketRef.current = url;
+    let url;
+    console.log(inputIp);
 
-    socketRef.current.onmessage = (event) => {
-      setMessages((prev) => [...prev, event.data]);
+    if (inputIp != ""){
+      url =  new WebSocket("ws://"+inputIp);
+    
+      socketRef.current = url;
 
-      if (event.data === "Luz Ligada") {
-        document.getElementById("BotaoLamp").style.backgroundColor="greeen";
+      socketRef.current.onmessage = (event) => {
+        setMessages((prev) => [...prev, event.data]);
 
-      } else if (event.data !== "Luz Desligada") {
-        document.getElementById("BotaoLamp").style.backgroundColor="gray";
-      }
+        if (event.data === "Luz Ligada") {
+          document.getElementById("BotaoLamp").style.backgroundColor="greeen";
 
-      if (event.data === "Actor Colidiu com o cubo"){
+        } else if (event.data !== "Luz Desligada") {
+          document.getElementById("BotaoLamp").style.backgroundColor="gray";
+        }
 
-
-      }
-    };
-
-
-    socketRef.current.onopen = () => {
-      console.log("Conectado ao WebSocket");
-
-      alert("Conectado");
-    };
-
-    socketRef.current.onmessage = (event) => {
-      setMessages((prev) => [...prev, event.data]);
-
-      if (event.data === "Luz Ligada") {
-        document.getElementById("BotaoLamp").style.backgroundColor="greeen";
-
-      } else if (event.data !== "Luz Desligada") {
-        document.getElementById("BotaoLamp").style.backgroundColor="gray";
-      }
-
-      if (event.data === "Actor Colidiu com o cubo"){
+        if (event.data === "Actor Colidiu com o cubo"){
 
 
-      }
-    };
+        }
+      };
 
-    socketRef.current.onclose = () => {
-      console.log("WebSocket desconectado");
-    };
 
-    return () => {
-      socketRef.current.close();
-    };
+      socketRef.current.onopen = () => {
+        console.log("Conectado ao WebSocket");
 
+        alert("Conectado");
+      };
+
+      socketRef.current.onmessage = (event) => {
+        setMessages((prev) => [...prev, event.data]);
+
+        if (event.data === "Luz Ligada") {
+          document.getElementById("BotaoLamp").style.backgroundColor="greeen";
+
+        } else if (event.data !== "Luz Desligada") {
+          document.getElementById("BotaoLamp").style.backgroundColor="gray";
+        }
+
+        if (event.data === "Actor Colidiu com o cubo"){
+
+
+        }
+      };
+
+      socketRef.current.onclose = () => {
+        console.log("WebSocket desconectado");
+        alert("Desconectado do servidor");
+      };
+
+      return () => {
+        socketRef.current.close();
+      };
+    }
+    if (inputIp === ""){
+      console.log("URL nao contem link valido");
+      alert("o Ip nao pode conter um url vazio");
+    }
+    else{
+      alert("Falha ao conectar, confira o endereço inserido e se o servidor esta ativo");
+    }
   }
 
 
+
+  //Funcoes locais
   const enviarMensagem = () => {
     if (socketRef.current.readyState === WebSocket.OPEN) {
       socketRef.current.send("Mudar Estado da Lampada");
@@ -125,6 +138,12 @@ export default function WebSocketComponent() {
   const mudarRotationEmX = () => {
     if (socketRef.current.readyState === WebSocket.OPEN) {
       socketRef.current.send("Alterar rotation em X");
+    }
+  };
+
+  const mudarRotationEmXNegativo = () => {
+    if (socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send("Alterar rotation em -X");
     }
   };
 
@@ -179,6 +198,12 @@ export default function WebSocketComponent() {
 
   }
 
+
+
+
+
+
+  //RETORNO (HTML)
   return (
     <div style={{ padding: '20px' }}>
 
@@ -194,6 +219,8 @@ export default function WebSocketComponent() {
       <button className='BotaoLocation' onClick={mudarLocationEmZ}>Mudar a location em Z = 10</button>
       <button className='BotaoLocation' onClick={mudarLocationEmZNegativo}>Mudar a location em Z = -10</button>
       <button className='BotaoLocation' onClick={mudarRotationEmX}>Mudar a rotation em X = 10</button>
+      <button className='BotaoLocation' onClick={mudarRotationEmXNegativo}>Mudar a rotation em X = -10</button>
+
 
       <hr />
 
