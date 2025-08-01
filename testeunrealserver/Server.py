@@ -5,13 +5,19 @@ import threading
 
 from tkinter import *
 
+import socket
+
+
+hostname = socket.gethostname()
+ip_local = socket.gethostbyname(hostname)
+
 # Lista para armazenar conexões ativas
 clients = set()
 
 App = Tk()
 
 App.geometry("200x200")
-Label(App, text="Teste").pack()
+Label(App, text=f'Conetecte-se em: {ip_local}:9999').pack()
 
 
 
@@ -64,8 +70,8 @@ async def enviar_para_todos(msg):
 
 async def main():
 
-    async with websockets.serve(handler, "192.168.3.70", 9999):
-        print("Servidor WebSocket rodando em ws://192.168.3.70:9999")
+    async with websockets.serve(handler, ip_local, 9999):
+        print(f'Servidor WebSocket rodando em ws://{ip_local}:9999')
         await asyncio.Future()  # mantém o servidor rodando
 
 
