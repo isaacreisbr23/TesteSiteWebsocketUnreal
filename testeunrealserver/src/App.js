@@ -24,7 +24,7 @@ export default function WebSocketComponent() {
     let url;
     console.log(inputIp);
 
-    if (inputIp != ""){
+    if (inputIp !== ""){
       url =  new WebSocket("ws://"+inputIp);
     
       socketRef.current = url;
@@ -147,6 +147,20 @@ export default function WebSocketComponent() {
     }
   };
 
+
+  const mudarRotationEmY = () => {
+    if (socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send("Alterar rotation em Y");
+    }
+  };
+
+  const mudarRotationEmYNegativo = () => {
+    if (socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send("Alterar rotation em -Y");
+    }
+  };
+
+
   const handleSliderChange = (event) => {
 
     const novoValor = event.target.value;
@@ -220,6 +234,8 @@ export default function WebSocketComponent() {
       <button className='BotaoLocation' onClick={mudarLocationEmZNegativo}>Mudar a location em Z = -10</button>
       <button className='BotaoLocation' onClick={mudarRotationEmX}>Mudar a rotation em X = 10</button>
       <button className='BotaoLocation' onClick={mudarRotationEmXNegativo}>Mudar a rotation em X = -10</button>
+      <button className='BotaoLocation' onClick={mudarRotationEmY}>Mudar a rotation em Y = 10</button>
+      <button className='BotaoLocation' onClick={mudarRotationEmYNegativo}>Mudar a rotation em Y = -10</button>
 
 
       <hr />
