@@ -26,34 +26,40 @@ export default function WebSocketComponent() {
     const url =  new WebSocket("ws://"+inputIp);
     socketRef.current = url;
 
-    socketRef.current.onopen = () => {
-      
-      alert("Conectado");
-
-    }
-
-
-  }
-
-
-  useEffect(() => {
-    socketRef.current = new WebSocket("");
-
-    socketRef.current.onopen = () => {
-      console.log("Conectado ao WebSocket");
-    };
-
     socketRef.current.onmessage = (event) => {
       setMessages((prev) => [...prev, event.data]);
 
-      if (event.data == "Luz Ligada") {
+      if (event.data === "Luz Ligada") {
         document.getElementById("BotaoLamp").style.backgroundColor="greeen";
 
       } else if (event.data !== "Luz Desligada") {
         document.getElementById("BotaoLamp").style.backgroundColor="gray";
       }
 
-      if (event.data == "Actor Colidiu com o cubo"){
+      if (event.data === "Actor Colidiu com o cubo"){
+
+
+      }
+    };
+
+
+    socketRef.current.onopen = () => {
+      console.log("Conectado ao WebSocket");
+
+      alert("Conectado");
+    };
+
+    socketRef.current.onmessage = (event) => {
+      setMessages((prev) => [...prev, event.data]);
+
+      if (event.data === "Luz Ligada") {
+        document.getElementById("BotaoLamp").style.backgroundColor="greeen";
+
+      } else if (event.data !== "Luz Desligada") {
+        document.getElementById("BotaoLamp").style.backgroundColor="gray";
+      }
+
+      if (event.data === "Actor Colidiu com o cubo"){
 
 
       }
@@ -66,7 +72,9 @@ export default function WebSocketComponent() {
     return () => {
       socketRef.current.close();
     };
-  }, []);
+
+  }
+
 
   const enviarMensagem = () => {
     if (socketRef.current.readyState === WebSocket.OPEN) {

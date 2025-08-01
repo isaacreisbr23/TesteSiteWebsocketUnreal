@@ -6,6 +6,7 @@ import threading
 from tkinter import *
 
 import socket
+import psutil
 
 
 hostname = socket.gethostname()
@@ -17,12 +18,35 @@ clients = set()
 App = Tk()
 
 App.geometry("200x200")
-Label(App, text=f'Conetecte-se em: {ip_local}:9999').pack()
+
+
+
 
 
 
 comandos_permitidos = ["ValorAzul:","ValorVerde:","ValorVermelho:","Alterar lampada na unreal",  "Alterar Location em X" , "Mudar Estado da Lampada", "Alterar Location em -X", "Alterar Location em Y", "Alterar Location em -Y", "Alterar Location em Z", "Alterar Location em -Z", "Alterar rotation em X", "Alterar rotation em -X", "Alterar rotation em Y", "Alterar rotation em -Y", "Alterar rotation em Z","Alterar rotation em -Z" ]
 retornos_permitidos = ["Actor Colidiu com o cubo","Luz Ligada","Lampada ligada na unreal"]
+
+
+
+def coletar_ip_com_gateway():
+
+    try:
+        # Conecta de forma fake a um IP público (Google DNS) sem enviar dados
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        ip = s.getsockname()[0]
+        s.close()
+        return ip
+    except Exception as e:
+        print("Erro ao obter IP:", e)
+        return None
+
+ip_de_rede = coletar_ip_com_gateway()
+
+
+Label(App, text=f'Conetecte-se em: {ip_de_rede}:9999').pack()
+
 
 async def handler(websocket):
 
@@ -70,8 +94,8 @@ async def enviar_para_todos(msg):
 
 async def main():
 
-    async with websockets.serve(handler, ip_local, 9999):
-        print(f'Servidor WebSocket rodando em ws://{ip_local}:9999')
+    async with websockets.serve(handler, ip_de_rede, 9999):
+        print(f'Servidor WebSocket rodando em ws://{ip_de_rede}:9999')
         await asyncio.Future()  # mantém o servidor rodando
 
 
