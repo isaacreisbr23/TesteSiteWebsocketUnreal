@@ -34,7 +34,7 @@ export default function WebSocketComponent() {
     console.log(inputIp);
 
     if (inputIp !== ""){
-      url =  new WebSocket("ws://"+inputIp);
+      url =  new WebSocket("ws://"+inputIp+":9999");
     
       socketRef.current = url;
 

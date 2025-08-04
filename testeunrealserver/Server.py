@@ -22,15 +22,16 @@ App = Tk()
 App.geometry("400x200")
 App.title("Verse Server")
 
+#------------------- COMANDOS E RETORNOS -------------------
 
-
-comandos_permitidos = ["Enviar mensagem global:",
+comandos_permitidos = [
+                        "Enviar mensagem global:",
                        "Alterar Nome para: ",
                        "ValorAzul:",
                        "ValorVerde:",
                        "ValorVermelho:",
                        "Alterar lampada na unreal", 
-                       "Alterar Location em X" ,
+                       "Alterar Location em X",
                         "Mudar Estado da Lampada", 
                         "Alterar Location em -X", 
                         "Alterar Location em Y", 
@@ -73,7 +74,7 @@ def abrir_site():
 ip_de_rede = coletar_ip_com_gateway()
 
 
-Label(App, text=f'Conetecte-se em: {ip_de_rede}:9999').pack()
+Label(App, text=f'Conetecte-se em: {ip_de_rede}').pack()
 Button(App, text="Abrir site", command=abrir_site).pack()
 
 async def handler(websocket):
