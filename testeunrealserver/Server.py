@@ -19,15 +19,37 @@ clients = set()
 
 App = Tk()
 
-App.geometry("200x200")
+App.geometry("400x200")
+App.title("Verse Server")
 
 
 
+comandos_permitidos = ["Enviar mensagem global:",
+                       "Alterar Nome para: ",
+                       "ValorAzul:",
+                       "ValorVerde:",
+                       "ValorVermelho:",
+                       "Alterar lampada na unreal", 
+                       "Alterar Location em X" ,
+                        "Mudar Estado da Lampada", 
+                        "Alterar Location em -X", 
+                        "Alterar Location em Y", 
+                        "Alterar Location em -Y", 
+                        "Alterar Location em Z", 
+                        "Alterar Location em -Z", 
+                        "Alterar rotation em X", 
+                        "Alterar rotation em -X", 
+                        "Alterar rotation em Y", 
+                        "Alterar rotation em -Y", 
+                        "Alterar rotation em Z",
+                        "Alterar rotation em -Z" 
+                    ]
 
 
-
-comandos_permitidos = ["ValorAzul:","ValorVerde:","ValorVermelho:","Alterar lampada na unreal",  "Alterar Location em X" , "Mudar Estado da Lampada", "Alterar Location em -X", "Alterar Location em Y", "Alterar Location em -Y", "Alterar Location em Z", "Alterar Location em -Z", "Alterar rotation em X", "Alterar rotation em -X", "Alterar rotation em Y", "Alterar rotation em -Y", "Alterar rotation em Z","Alterar rotation em -Z" ]
-retornos_permitidos = ["Actor Colidiu com o cubo","Luz Ligada","Lampada ligada na unreal"]
+retornos_permitidos = ["Actor Colidiu com o cubo",
+                       "Luz Ligada",
+                       "Lampada ligada na unreal", 
+                       "Nome alterado"]
 
 
 

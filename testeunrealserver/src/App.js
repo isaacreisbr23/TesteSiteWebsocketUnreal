@@ -18,6 +18,15 @@ export default function WebSocketComponent() {
   const socketRef = useRef(null);
 
 
+  //entry do nome
+  const [valorNome, setvalorNome] = useState("");
+  const [inputNome, setinputNome] = useState("");
+
+
+  //entry da msg global
+  const [valorMensagemGlobal, setvalorMensagemGlobal] = useState("");
+  const [inputMensagemGlobal, setinputMensagemGlobal] = useState("");
+
   //Conexao ao socket
   const conectarAoSocket = () => {
 
@@ -29,6 +38,9 @@ export default function WebSocketComponent() {
     
       socketRef.current = url;
 
+
+
+      // ---------- HANDLE DOS RETORNOS DO SERVER ----------
       socketRef.current.onmessage = (event) => {
         setMessages((prev) => [...prev, event.data]);
 
@@ -45,13 +57,15 @@ export default function WebSocketComponent() {
         }
       };
 
-
+      // ---------- ABERTURA DO SOCKET ----------
       socketRef.current.onopen = () => {
         console.log("Conectado ao WebSocket");
 
         alert("Conectado");
       };
 
+
+      // ---------- HANDLE DAS MENSAGENS COM O SERVER ----------
       socketRef.current.onmessage = (event) => {
         setMessages((prev) => [...prev, event.data]);
 
@@ -66,8 +80,16 @@ export default function WebSocketComponent() {
 
 
         }
+
+        if(event.data === "Nome alterado"){
+
+          alert("Nome alterado");
+
+        }
       };
 
+
+      // ---------- FECHAMENTO DO SOCKET ----------
       socketRef.current.onclose = () => {
         console.log("WebSocket desconectado");
         alert("Desconectado do servidor");
@@ -172,6 +194,8 @@ export default function WebSocketComponent() {
 
   };
 
+
+  
   const handleSliderChangeVerde = (event) => {
 
     const novoValorVerde = event.target.value;
@@ -183,6 +207,7 @@ export default function WebSocketComponent() {
 
   };
 
+  
   const handleSliderChangeAzul = (event) => {
 
     const novoValorAzul = event.target.value;
@@ -196,7 +221,8 @@ export default function WebSocketComponent() {
 
   };
 
-  const HandleChangeEnderecoDoServer = (event) => {
+  // --------- Entry de conexao com servidor ----------
+  const handleChangeEnderecoDoServer = (event) => {
 
 
     const EnderecoServer = event.target.value;
@@ -213,15 +239,56 @@ export default function WebSocketComponent() {
   }
 
 
+  // --------- Entry de mudança de nome ----------
+  const alterarNomeDoClient = () => {
+
+    
+
+    if (socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send("Alterar Nome para: " + valorNome);
+      console.log("Alterar Nome para: " + valorNome);
+    } else {
+      console.log("Erro no socket");
+    }
+
+  }
+
+  const handleNomeDoClient = (event) => {
+
+    const NomeASerPassado = event.target.value;
+    setvalorNome(NomeASerPassado);
+    setinputNome(NomeASerPassado);
+   
+
+  }
 
 
+  // -------- entry para enviar mensagem -------
 
+  const handleMsgGlobal = (event) => {
 
-  //RETORNO (HTML)
+    const mensagemASerPassada = event.target.value;
+    setvalorMensagemGlobal(mensagemASerPassada);
+    setinputMensagemGlobal(mensagemASerPassada);
+
+  }
+
+  const enviarMensagemGlobal = () => {
+
+    if (socketRef.current.readyState === WebSocket.OPEN) {
+      socketRef.current.send("Enviar mensagem global:" + valorMensagemGlobal);
+      console.log("Enviar mensagem global:" + valorMensagemGlobal);
+    } else {
+      console.log("Erro no socket");
+    }
+
+  }
+ 
+  // ---------- RETORNO (HTML) ----------
   return (
     <div style={{ padding: '20px' }}>
 
-      <input type="text" onChange={HandleChangeEnderecoDoServer} placeholder="Ip do server "></input>
+      <input type="text" onChange={handleChangeEnderecoDoServer} placeholder="Ip do server "></input>
       <button onClick={setarIpDoServer}>Conectar</button>
 
       <h2>Mensagens do servidor:</h2>
@@ -237,6 +304,11 @@ export default function WebSocketComponent() {
       <button className='BotaoLocation' onClick={mudarRotationEmY}>Mudar a rotation em Y = 10</button>
       <button className='BotaoLocation' onClick={mudarRotationEmYNegativo}>Mudar a rotation em Y = -10</button>
 
+      <input type="text" onChange={handleNomeDoClient} placeholder="Nome no jogo"></input>
+      <button onClick={alterarNomeDoClient}>Alterar Nome</button>
+
+      <input type="text" onChange={handleMsgGlobal} placeholder="Enviar msg global"></input>
+      <button onClick={enviarMensagemGlobal}>Enviar Mensagem global</button>
 
       <hr />
 
