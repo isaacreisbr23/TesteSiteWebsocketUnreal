@@ -44,14 +44,29 @@
 
 	}
 
+	bool UInteracoesComponent::AlterarNomeDoClient(FString NovoNome, UTextRenderComponent* textRenderParaAlterar)
+	{	
+
+		textRenderParaAlterar -> SetText(FText::FromString(NovoNome));
+
+		return false;
+	}
+
+	bool UInteracoesComponent::EnviarMensagemGlobal(FString MensagemGlobal, float TempoParaMostrar)
+	{	
+
+		GEngine->AddOnScreenDebugMessage(-1, TempoParaMostrar, FColor::Green, FString::Printf(TEXT("%s"), *MensagemGlobal));
+
+		return false;
+	}
+
 	void UInteracoesComponent::BeginPlay()
 	{
 		Super::BeginPlay();
 
-		ConectarWebSocket();
 	}
 
-	void UInteracoesComponent::ConectarWebSocket()
+	void UInteracoesComponent::ConectarWebSocket(FString EnderecoSocket)
 	{
 
 		TWeakObjectPtr<UInteracoesComponent> WeakThis(this);
@@ -61,7 +76,7 @@
 			FModuleManager::LoadModuleChecked<FWebSocketsModule>("WebSockets");
 		}
 		
-		WebSocket = FWebSocketsModule::Get().CreateWebSocket("ws://192.168.3.70:9999");
+		WebSocket = FWebSocketsModule::Get().CreateWebSocket(EnderecoSocket);
 
 		WebSocket->OnConnected().AddLambda([]()
 			{
@@ -92,7 +107,7 @@
 
 
 						}
-						else if(WeakThis->bLampada == false && WeakThis-> WebSocket){
+						if(WeakThis->bLampada == false && WeakThis-> WebSocket) {
 							WeakThis->WebSocket->Send(TEXT("Luz Desligada"));
 
 						}
@@ -149,6 +164,31 @@
 					if (Message == "Alterar rotation em -Y") {
 
 						WeakThis->AlterarRotationDaMesh(0, -10, 0);
+					}
+
+					if (Message.Contains("Alterar Nome para: ")) {
+
+						FString NomeRecebidoDoServer;
+
+						Message.Split("Alterar Nome para: ", nullptr, &NomeRecebidoDoServer);
+
+						WeakThis->LocalNomeRecebido = NomeRecebidoDoServer;
+
+						WeakThis->WebSocket->Send("Nome alterado");
+
+						
+						
+					}
+
+					if (Message.Contains("Enviar mensagem global:")) {
+						
+						FString MensagemGlobalRecebida;
+						float TempoNaTela = 3.0;
+						Message.Split("Enviar mensagem global:", nullptr, &MensagemGlobalRecebida);
+						WeakThis->EnviarMensagemGlobal(MensagemGlobalRecebida,TempoNaTela);
+
+
+
 					}
 
 					//Mudança RGB

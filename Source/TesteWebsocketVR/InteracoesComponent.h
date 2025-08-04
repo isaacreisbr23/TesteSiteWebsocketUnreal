@@ -7,6 +7,8 @@
 #include "IWebSocket.h"
 #include "WebSocketsModule.h"
 
+#include "Components/TextRenderComponent.h"
+
 #include "InteracoesComponent.generated.h"
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -23,10 +25,14 @@ public:
 	UFUNCTION(BlueprintCallable) void AlterarLuz();
 	UFUNCTION(BlueprintCallable) void AlterarRotationDaMesh(double X, double Y, double Z);
 	UFUNCTION(BlueprintCallable) void EnviarColisao();
+	UFUNCTION(BlueprintCallable) bool AlterarNomeDoClient(FString NovoNome, UTextRenderComponent* textRenderParaAlterar);
+	UFUNCTION(BlueprintCallable) bool EnviarMensagemGlobal(FString MensagemGlobal, float TempoParaMostrar);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float ValorCorVermelha;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float ValorCorVerde;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) float ValorCorAzul;
+
+	UPROPERTY(BlueprintReadWrite) FString LocalNomeRecebido;
 
 protected:
 	virtual void BeginPlay() override;
@@ -37,5 +43,5 @@ public:
 private:
 	TSharedPtr<IWebSocket> WebSocket;
 
-	void ConectarWebSocket();
+	UFUNCTION(BlueprintCallable)void ConectarWebSocket(FString EnderecoSocket);
 };
