@@ -27,4 +27,4 @@ Unreal executa a ação e pode enviar de volta dados (como posição, estado, et
 Tudo em tempo real com baixa latência.
 
 🤝 Contribuição
-Sinta-se livre para abrir issues. Este projeto está em constante evolução para aplicações em VR, simulações, IoT e outros.
+Sinta-se livre para contribuir. Este projeto está em constante evolução para aplicações em Desktop, VR, simulações, IoT e outros.
