@@ -1,4 +1,4 @@
-# [*] WEBSOCKET Unreal Engine 5 + Python e React [*]
+# * WEBSOCKET Unreal Engine 5 + Python e React *
 
 🔗 Integração WebSocket: Unreal Engine + Python + React
 Este projeto demonstra a integração em tempo real entre Unreal Engine 5 (C++), Python (server WebSocket) e React (cliente web) por meio de comunicação WebSocket bidirecional. Ideal para aplicações interativas como jogos, simulações em VR, dashboards de controle e muito mais.
